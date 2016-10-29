@@ -12,8 +12,7 @@ mkdir -p $HAPROXY_SERVICE/env
 if [ -n "${PORTS-}" ]; then
   echo $PORTS > $HAPROXY_SERVICE/env/PORTS
 else
-  echo 'Define $PORTS with a comma-separated list of ports to which HAProxy binds' >&2
-  exit 1
+  echo 9090 > $HAPROXY_SERVICE/env/PORTS
 fi
 
 if [ -n "${HAPROXY_RELOAD_SIGTERM_DELAY-}" ]; then

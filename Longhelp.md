@@ -442,7 +442,7 @@ Same as HTTP_FRONTEND_ACL_ONLY_WITH_PATH, but for HTTPS.
 
 **Default template for `HAPROXY_HTTPS_FRONTEND_ACL_ONLY_WITH_PATH`:**
 ```
-  acl path_{backend} path_beg {path}
+  acl path_{backend} path_reg {path}
 ```
 ## `HAPROXY_HTTPS_FRONTEND_ACL_WITH_AUTH`
   *Overridable per app*
@@ -652,7 +652,7 @@ vhosts routing to the same backend
 
 **Default template for `HAPROXY_HTTP_FRONTEND_ACL_ONLY_WITH_PATH`:**
 ```
-  acl path_{backend} path_beg {path}
+  acl path_{backend} path_reg {path}
 ```
 ## `HAPROXY_HTTP_FRONTEND_ACL_ONLY_WITH_PATH_AND_AUTH`
   *Overridable per app*
@@ -667,7 +667,7 @@ vhosts routing to the same backend
 
 **Default template for `HAPROXY_HTTP_FRONTEND_ACL_ONLY_WITH_PATH_AND_AUTH`:**
 ```
-  acl path_{backend} path_beg {path}
+  acl path_{backend} path_reg {path}
   acl auth_{cleanedUpHostname} http_auth(user_{backend})
 ```
 ## `HAPROXY_HTTP_FRONTEND_ACL_WITH_AUTH`
@@ -699,7 +699,7 @@ of the `HAPROXY_HTTP_FRONTEND_HEAD` thru HTTP basic auth.
 ```
   acl host_{cleanedUpHostname} hdr(host) -i {hostname}
   acl auth_{cleanedUpHostname} http_auth(user_{backend})
-  acl path_{backend} path_beg {path}
+  acl path_{backend} path_reg {path}
   http-request auth realm "{realm}" if host_{cleanedUpHostname} path_{backend} !auth_{cleanedUpHostname}
   use_backend {backend} if host_{cleanedUpHostname} path_{backend}
 ```
@@ -715,7 +715,7 @@ of the `HAPROXY_HTTP_FRONTEND_HEAD`.
 **Default template for `HAPROXY_HTTP_FRONTEND_ACL_WITH_PATH`:**
 ```
   acl host_{cleanedUpHostname} hdr(host) -i {hostname}
-  acl path_{backend} path_beg {path}
+  acl path_{backend} path_reg {path}
   use_backend {backend} if host_{cleanedUpHostname} path_{backend}
 ```
 ## `HAPROXY_HTTP_FRONTEND_APPID_ACL`
@@ -1133,7 +1133,7 @@ Ex: `HAPROXY_0_MODE = 'http'`
 Specified as `HAPROXY_{n}_PATH`.
 
 The HTTP path to match, starting at the beginning. To specify multiple paths,
-pass a space separated list. The syntax matches that of the `path_beg` config
+pass a space separated list. The syntax matches that of the `path_reg` config
 option in HAProxy. To use the path routing, you must also define a VHost.
 
 If you have multiple backends which share VHosts or paths, you may need to

@@ -46,4 +46,4 @@ ENTRYPOINT [ "/marathon-lb/run" ]
 
 CMD [ "sse", "--health-check", "--group", "external" ]
 
-EXPOSE 80 443 9090 9091
+EXPOSE 8095

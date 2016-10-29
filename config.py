@@ -81,7 +81,7 @@ defaults
   option            http-server-close
   option            dontlognull
 listen stats
-  bind 0.0.0.0:9090
+  bind 0.0.0.0:8095
   balance
   mode http
   stats enable
@@ -316,7 +316,7 @@ glues the acl name to the appropriate backend, and add http basic auth.
             ConfigTemplate(name='HTTP_FRONTEND_ACL_WITH_PATH',
                            value='''\
   acl host_{cleanedUpHostname} hdr(host) -i {hostname}
-  acl path_{backend} path_beg {path}
+  acl path_{backend} path_reg {path}
   use_backend {backend} if host_{cleanedUpHostname} path_{backend}
 ''',
                            overridable=True,
@@ -330,7 +330,7 @@ of the `HAPROXY_HTTP_FRONTEND_HEAD`.
                            value='''\
   acl host_{cleanedUpHostname} hdr(host) -i {hostname}
   acl auth_{cleanedUpHostname} http_auth(user_{backend})
-  acl path_{backend} path_beg {path}
+  acl path_{backend} path_reg {path}
   http-request auth realm "{realm}" if host_{cleanedUpHostname} \
 path_{backend} !auth_{cleanedUpHostname}
   use_backend {backend} if host_{cleanedUpHostname} path_{backend}
@@ -344,7 +344,7 @@ of the `HAPROXY_HTTP_FRONTEND_HEAD` thru HTTP basic auth.
         self.add_template(
             ConfigTemplate(name='HTTP_FRONTEND_ACL_ONLY_WITH_PATH',
                            value='''\
-  acl path_{backend} path_beg {path}
+  acl path_{backend} path_reg {path}
 ''',
                            overridable=True,
                            description='''\
@@ -357,7 +357,7 @@ vhosts routing to the same backend
         self.add_template(
             ConfigTemplate(name='HTTP_FRONTEND_ACL_ONLY_WITH_PATH_AND_AUTH',
                            value='''\
-  acl path_{backend} path_beg {path}
+  acl path_{backend} path_reg {path}
   acl auth_{cleanedUpHostname} http_auth(user_{backend})
 ''',
                            overridable=True,
@@ -371,7 +371,7 @@ vhosts routing to the same backend
         self.add_template(
             ConfigTemplate(name='HTTPS_FRONTEND_ACL_ONLY_WITH_PATH',
                            value='''\
-  acl path_{backend} path_beg {path}
+  acl path_{backend} path_reg {path}
 ''',
                            overridable=True,
                            description='''\
@@ -1292,7 +1292,7 @@ labels.append(Label(name='PATH',
                     func=set_path,
                     description='''\
 The HTTP path to match, starting at the beginning. To specify multiple paths,
-pass a space separated list. The syntax matches that of the `path_beg` config
+pass a space separated list. The syntax matches that of the `path_reg` config
 option in HAProxy. To use the path routing, you must also define a VHost.
 
 If you have multiple backends which share VHosts or paths, you may need to
